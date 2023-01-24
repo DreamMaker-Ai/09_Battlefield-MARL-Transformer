@@ -58,7 +58,7 @@ class Config:
         self.dropout_rate = 0.2  # default=0.2
 
         # Training parameters
-        self.actor_rollout_steps = 80  # default=100
+        self.actor_rollout_steps = 50  # default=100
         self.num_update_cycles = 1000000
         self.actor_rollouts_before_train = 100  # default=100
         self.batch_size = 32  # Default=32
@@ -81,10 +81,10 @@ class Config:
         self.agent_forces = (50, 150)
 
         # Define possible red / blue agent parameters
-        self.red_platoons = (5, 15)  # num range of red platoons
+        self.red_platoons = (5, 10)  # num range of red platoons
         self.red_companies = (5, 10)  # num range of red companies
 
-        self.blue_platoons = (5, 15)  # num range of blue platoons
+        self.blue_platoons = (5, 10)  # num range of blue platoons
         self.blue_companies = (5, 10)  # num range of blue companies
 
         self.efficiencies_red = (0.3, 0.5)  # range
