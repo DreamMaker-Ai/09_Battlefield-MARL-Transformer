@@ -26,7 +26,7 @@ class Config:
         self.fig_id_force = 11
 
         # Define environment parameters
-        self.grid_size = 20
+        self.grid_size = 15  # default=20
         self.offset = 0  # blue-team offset from edges
 
         # Define gym spaces
@@ -46,7 +46,7 @@ class Config:
                            )
 
         # Buffer
-        self.capacity = 50000  # default=100000
+        self.capacity = 10000  # default=100000
         self.compress = True
         self.prioritized_replay = True
 
@@ -60,7 +60,7 @@ class Config:
         # Training parameters
         self.actor_rollout_steps = 50  # default=100
         self.num_update_cycles = 1000000
-        self.actor_rollouts_before_train = 100  # default=100
+        self.actor_rollouts_before_train = 50  # default=100
         self.batch_size = 32  # Default=32
         self.num_minibatchs = 30  # bach_sizeのminibatchの数/1 update_cycle of learner, default=30
         self.tau = 0.01  # Soft update of target network
@@ -81,11 +81,11 @@ class Config:
         self.agent_forces = (50, 150)
 
         # Define possible red / blue agent parameters
-        self.red_platoons = (5, 10)  # num range of red platoons
-        self.red_companies = (5, 10)  # num range of red companies
+        self.red_platoons = (3, 7)  # num range of red platoons
+        self.red_companies = (1, 3)  # num range of red companies
 
-        self.blue_platoons = (5, 10)  # num range of blue platoons
-        self.blue_companies = (5, 10)  # num range of blue companies
+        self.blue_platoons = (3, 7)  # num range of blue platoons
+        self.blue_companies = (1, 3)  # num range of blue companies
 
         self.efficiencies_red = (0.3, 0.5)  # range
         self.efficiencies_blue = (0.3, 0.5)
