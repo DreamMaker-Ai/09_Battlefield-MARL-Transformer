@@ -19,7 +19,8 @@ def get_rewards_before_engagement(reds_in_cell, blues_in_cell,
                                    np.arctan(reds_in_cell_ef / blues_in_cell_ef)  # [0.5,1)
 
             else:
-                rewards[red.id] += -0.5
+                # rewards[red.id] += -0.5  # For trial-0
+                rewards[red.id] += 0.1  # For trial-1
 
             infos[str(red.pos) + ' ' + red.id]['raw_reward'] = np.round(rewards[red.id], 1)
             infos[str(red.pos) + ' ' + red.id]['reward'] = np.round(rewards[red.id], 1)

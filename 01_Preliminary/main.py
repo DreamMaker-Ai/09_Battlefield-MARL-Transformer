@@ -1,6 +1,9 @@
 """
 rayで並列処理
 """
+import json
+import os
+
 import ray
 import time
 import numpy as np
@@ -13,6 +16,69 @@ from actor import Actor
 from replay import Replay
 from learner import Learner
 from tester import Tester
+
+
+def write_config(config):
+    """
+    Save Training conditions
+    """
+    config_list = {
+        'max_episodes_test_play': config.max_episodes_test_play,
+        'grid_size': config.grid_size,
+        'offset': config.offset,
+
+        'action_dim': config.action_dim,
+        'observation_channels': config.observation_channels,
+        'n_frames': config.n_frames,
+
+        'capacity': config.capacity,
+        'compress': config.compress,
+        'prioritized_replay': config.prioritized_replay,
+
+        'hidden_dim': config.hidden_dim,
+        'key_dim': config.key_dim,
+        'num_heads': config.num_heads,
+        'dropout_rate': config.dropout_rate,
+
+        'actor_rollout_steps': config.actor_rollout_steps,
+        'num_update_cycles': config.num_update_cycles,
+        'actor_rollouts_before_train': config.actor_rollouts_before_train,
+        'batch_size': config.batch_size,
+        'num_minibatchs': config.num_minibatchs,
+
+        'tau': config.tau,
+        'gamma': config.gamma,
+
+        'max_steps': config.max_steps,
+
+        'learning_rate': config.learning_rate,
+        'loss_coef': config.loss_coef,
+
+        'threshold': config.threshold,
+        'mul': config.mul,
+        'dt': config.dt,
+
+        'agent_types': config.agent_types,
+        'agent_forces': config.agent_forces,
+
+        'red_platoons': config.red_platoons,
+        'red_companies': config.red_companies,
+
+        'blue_platoons': config.blue_platoons,
+        'blue_companies': config.blue_companies,
+
+        'efficiencies_red': config.efficiencies_red,
+        'efficiencies_blue': config.efficiencies_blue,
+
+        'max_num_red_agents': config.max_num_red_agents,
+    }
+
+    dir_save = './trial'
+    if not os.path.exists(dir_save):
+        os.mkdir(dir_save)
+
+    with open(dir_save + '/training_conditions.json', 'w') as f:
+        json.dump(config_list, f, indent=5)
 
 
 def main(num_actors=8):
@@ -38,6 +104,8 @@ def main(num_actors=8):
     history = []
 
     config = Config()
+
+    write_config(config)
 
     # actorのインスタンスをnum_actors個生成
     epsilons = np.linspace(0.01, 0.5, num_actors)

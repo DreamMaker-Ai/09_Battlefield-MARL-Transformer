@@ -65,13 +65,13 @@ class MakeAnimation_AttentionMap:
         observations of red[-1]: (grid_size, grid_size, env.config.observation_channels)
         observations = [
             0. env.battlefield
-            1. ally_log_normalized_force
+            1. ally_normalized_force
             2. ally_efficiency
-            3. my_log_normalized_force
+            3. my_normalized_force
             4. my_efficiency
-            5. blue_log_normalized_force
+            5. blue_normalized_force
             6. blue_efficiency
-            7. engage_log_normalized_force ]
+            7. engage_normalized_force ]
         """
         # observations of log-normalized force
         r_channel_force = observations[:, :, 0] + observations[:, :, 1] + observations[:, :, 3]
@@ -127,7 +127,7 @@ class MakeAnimation_AttentionMap:
         """
         heads_type: 'val_heads' or 'policy_heads'
         """
-        dir_save = './animation'
+        dir_save = './trial/test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -177,10 +177,7 @@ class MakeAnimation_AttentionMap:
         anim = animation.ArtistAnimation(fig, ims, interval=300, blit=True,
                                          repeat_delay=3000, repeat=True)
 
-        filename = './animation/attention' + '_reds_obs_' + \
-                   str(int(self.env.initial_reds_force)) + \
-                   '_blues_' + str(int(self.env.initial_blues_force))
-
+        filename = './trial/test_engagement/agent_obs_attention_heads'
         anim.save(filename + '.mp4', writer='ffmpeg')
         # For mp4, need 'sudo apt install ffmpeg' @ terminal
 

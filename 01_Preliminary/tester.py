@@ -1,4 +1,6 @@
+import os.path
 import random
+import json
 
 import ray
 import gym
@@ -11,6 +13,8 @@ from battlefield_strategy import BattleFieldStrategy
 from models import MarlTransformerModel
 from utils_gnn import get_alive_agents_ids
 from utils_transformer import make_mask, make_padded_obs
+
+import matplotlib.pyplot as plt
 
 
 def who_wins(result_red, result_blue):
@@ -281,6 +285,10 @@ class Tester:
             dones['all_dones'] = False
             episode_reward = 0
 
+            if self.env.config.make_time_plot:
+                self.save_initial_conds()
+                self.initialize_time_plot()
+
             while not dones['all_dones']:
 
                 q_logits, scores = self.policy(self.padded_states, self.mask, training=False)
@@ -369,6 +377,10 @@ class Tester:
                 # Update episode rewards
                 episode_reward += np.sum(agents_rewards)
 
+                # Store time history of an engagement
+                if self.env.config.make_time_plot:
+                    self.store_time_history()
+
                 # Make animation
                 if self.env.config.make_animation:
                     self.env.make_animation.add_frame(self.env)  # log-normalized map
@@ -408,6 +420,10 @@ class Tester:
                     # Summarize episode result
                     results = summarize_episode_results(results, result_red, result_blue, winner)
 
+                    # Generate time plot of an engagement
+                    if self.env.config.make_time_plot:
+                        self.make_time_plot()
+
                     # Generate animation
                     if self.env.config.make_animation:
                         self.env.make_animation.generate_movies(self.env)
@@ -426,6 +442,233 @@ class Tester:
         result = summarize_results(results)
 
         return result
+
+    def save_initial_conds(self):
+        red_properties = []
+        for red in self.env.reds:
+            red_properties.append({k: v for k, v in red.__dict__.items()})
+
+        blue_properties = []
+        for blue in self.env.blues:
+            blue_properties.append({k: v for k, v in blue.__dict__.items()})
+
+        initial_conds = {
+            'summary of reds': {
+                'R0': self.env.config.R0,
+                'num_red_agents': self.env.config.num_red_agents,
+                'num_red_platoons': self.env.config.num_red_platoons,
+                'num_red_companies': self.env.config.num_red_companies,
+            },
+
+            'summary of blues': {
+                'B0': self.env.config.B0,
+                'num_blue_agents': self.env.config.num_blue_agents,
+                'num_blue_platoons': self.env.config.num_blue_platoons,
+                'num_blue_companies': self.env.config.num_blue_companies,
+            },
+
+            'reds_initial_properties': red_properties,
+            'blues_initial_properties': blue_properties,
+        }
+
+        dir_save = './trial/test_engagement'
+        if not os.path.exists(dir_save):
+            os.mkdir(dir_save)
+
+        with open(dir_save + '/initial_conds.json', 'w') as f:
+            json.dump(initial_conds, f, indent=5)
+
+    def make_time_plot(self):
+        dir_save = './trial/test_engagement'
+        if not os.path.exists(dir_save):
+            os.mkdir(dir_save)
+
+        steps = self.steps_list
+        eps = 1e-3
+
+        """ 1. platoons """
+        red_platoons_num = np.array(self.red_platoons_num_list)
+        red_platoons_force = np.array(self.red_platoons_force_list)
+        red_platoons_efficiency = np.array(self.red_platoons_efficiency_list)
+        red_platoons_ef = np.array(self.red_platoons_ef_list)
+
+        blue_platoons_num = np.array(self.blue_platoons_num_list)
+        blue_platoons_force = np.array(self.blue_platoons_force_list)
+        blue_platoons_efficiency = np.array(self.blue_platoons_efficiency_list)
+        blue_platoons_ef = np.array(self.blue_platoons_ef_list)
+
+        fig1, axe1 = plt.subplots(nrows=2, ncols=2, squeeze=False, figsize=(14, 8))
+
+        axe1[0, 0].plot(steps, red_platoons_num, 'r')
+        axe1[0, 0].plot(steps, blue_platoons_num, 'b')
+        axe1[0, 0].set_title('Num of alive platoons')
+        axe1[0, 0].grid()
+
+        axe1[0, 1].plot(steps, red_platoons_force, 'r')
+        axe1[0, 1].plot(steps, blue_platoons_force, 'b')
+        axe1[0, 1].set_title('Remaining effective force of platoons')
+        axe1[0, 1].grid()
+
+        axe1[1, 0].plot(steps, red_platoons_efficiency / (red_platoons_num + eps), 'r')
+        axe1[1, 0].plot(steps, blue_platoons_efficiency / (blue_platoons_num + eps), 'b')
+        axe1[1, 0].set_title('Average remaining efficiency of platoons')
+        axe1[1, 0].grid()
+
+        axe1[1, 1].plot(steps, red_platoons_ef, 'r')
+        axe1[1, 1].plot(steps, blue_platoons_ef, 'b')
+        axe1[1, 1].set_title('Remaining efficiency * force of platoons')
+        axe1[1, 1].grid()
+
+        fig1.savefig(dir_save + '/platoons', dpi=300)
+
+        """ 2. companies """
+        red_companies_num = np.array(self.red_companies_num_list)
+        red_companies_force = np.array(self.red_companies_force_list)
+        red_companies_efficiency = np.array(self.red_companies_efficiency_list)
+        red_companies_ef = np.array(self.red_companies_ef_list)
+
+        blue_companies_num = np.array(self.blue_companies_num_list)
+        blue_companies_force = np.array(self.blue_companies_force_list)
+        blue_companies_efficiency = np.array(self.blue_companies_efficiency_list)
+        blue_companies_ef = np.array(self.blue_companies_ef_list)
+
+        fig2, axe2 = plt.subplots(nrows=2, ncols=2, squeeze=False, figsize=(14, 8))
+
+        axe2[0, 0].plot(steps, red_companies_num, 'r')
+        axe2[0, 0].plot(steps, blue_companies_num, 'b')
+        axe2[0, 0].set_title('Num of alive companies')
+        axe2[0, 0].grid()
+
+        axe2[0, 1].plot(steps, red_companies_force, 'r')
+        axe2[0, 1].plot(steps, blue_companies_force, 'b')
+        axe2[0, 1].set_title('Remaining effective force of companies')
+        axe2[0, 1].grid()
+
+        axe2[1, 0].plot(steps, red_companies_efficiency / (red_companies_num + eps), 'r')
+        axe2[1, 0].plot(steps, blue_companies_efficiency / (blue_companies_num + eps), 'b')
+        axe2[1, 0].set_title('Average remaining efficiency of companies')
+        axe2[1, 0].grid()
+
+        axe2[1, 1].plot(steps, red_companies_ef, 'r')
+        axe2[1, 1].plot(steps, blue_companies_ef, 'b')
+        axe2[1, 1].set_title('Remaining efficiency * force of companies')
+        axe2[1, 1].grid()
+
+        fig2.savefig(dir_save + '/companies', dpi=300)
+
+        """ 3. red platoons + companies """
+        fig3, axe3 = plt.subplots(nrows=2, ncols=2, squeeze=False, figsize=(14, 8))
+
+        axe3[0, 0].plot(steps, red_platoons_num + red_companies_num, 'r')
+        axe3[0, 0].plot(steps, blue_platoons_num + blue_companies_num, 'b')
+        axe3[0, 0].set_title('Num of alive platoons + companies')
+        axe3[0, 0].grid()
+
+        axe3[0, 1].plot(steps, red_platoons_force + red_companies_force, 'r')
+        axe3[0, 1].plot(steps, blue_platoons_force + blue_companies_force, 'b')
+        axe3[0, 1].set_title('Remaining effective force of platoons + companies')
+        axe3[0, 1].grid()
+
+        axe3[1, 0].plot(steps,
+                        (red_platoons_efficiency + red_companies_efficiency) /
+                        (red_platoons_num + red_companies_num + eps), 'r')
+        axe3[1, 0].plot(steps,
+                        (blue_platoons_efficiency + blue_companies_efficiency) /
+                        (blue_platoons_num + blue_companies_num + eps), 'b')
+        axe3[1, 0].set_title('Average remaining efficiency of platoons + companies')
+        axe3[1, 0].grid()
+
+        axe3[1, 1].plot(steps, red_platoons_ef + red_companies_ef, 'r')
+        axe3[1, 1].plot(steps, blue_platoons_ef + blue_companies_ef, 'b')
+        axe3[1, 1].set_title('Remaining efficiency * force of platoons + companies')
+        axe3[1, 1].grid()
+
+        fig3.savefig(dir_save + '/teams', dpi=300)
+
+    def store_time_history(self):
+
+        red_platoons_force = 0
+        red_platoons_efficiency = 0
+        red_platoons_ef = 0
+        red_platoons_num = 0
+        red_companies_force = 0
+        red_companies_efficiency = 0
+        red_companies_ef = 0
+        red_companies_num = 0
+
+        blue_platoons_force = 0
+        blue_platoons_efficiency = 0
+        blue_platoons_ef = 0
+        blue_platoons_num = 0
+        blue_companies_force = 0
+        blue_companies_efficiency = 0
+        blue_companies_ef = 0
+        blue_companies_num = 0
+
+        self.steps_list.append(self.step)
+
+        for red in self.env.reds:
+            if red.alive:
+                if red.type == 'platoon':
+                    red_platoons_force += red.effective_force
+                    red_platoons_efficiency += red.efficiency
+                    red_platoons_ef += red.force * red.efficiency
+                    red_platoons_num += 1
+                else:
+                    red_companies_force += red.effective_force
+                    red_companies_efficiency += red.efficiency
+                    red_companies_ef += red.force * red.efficiency
+                    red_companies_num += 1
+
+        self.red_platoons_force_list.append(red_platoons_force)
+        self.red_platoons_efficiency_list.append(red_platoons_efficiency)
+        self.red_platoons_ef_list.append(red_platoons_ef)
+        self.red_platoons_num_list.append(red_platoons_num)
+        self.red_companies_force_list.append(red_companies_force)
+        self.red_companies_efficiency_list.append(red_companies_efficiency)
+        self.red_companies_ef_list.append(red_companies_ef)
+        self.red_companies_num_list.append(red_companies_num)
+
+        for blue in self.env.blues:
+            if blue.alive:
+                if blue.type == 'platoon':
+                    blue_platoons_force += blue.effective_force
+                    blue_platoons_efficiency += blue.efficiency
+                    blue_platoons_ef += blue.force * blue.efficiency
+                    blue_platoons_num += 1
+                else:
+                    blue_companies_force += blue.effective_force
+                    blue_companies_efficiency += blue.efficiency
+                    blue_companies_ef += blue.force * blue.efficiency
+                    blue_companies_num += 1
+
+        self.blue_platoons_force_list.append(blue_platoons_force)
+        self.blue_platoons_efficiency_list.append(blue_platoons_efficiency)
+        self.blue_platoons_ef_list.append(blue_platoons_ef)
+        self.blue_platoons_num_list.append(blue_platoons_num)
+        self.blue_companies_force_list.append(blue_companies_force)
+        self.blue_companies_efficiency_list.append(blue_companies_efficiency)
+        self.blue_companies_ef_list.append(blue_companies_ef)
+        self.blue_companies_num_list.append(blue_companies_num)
+
+    def initialize_time_plot(self):
+        self.steps_list = []
+        self.red_platoons_force_list = []
+        self.red_platoons_efficiency_list = []
+        self.red_platoons_ef_list = []
+        self.red_platoons_num_list = []
+        self.red_companies_force_list = []
+        self.red_companies_efficiency_list = []
+        self.red_companies_ef_list = []
+        self.red_companies_num_list = []
+        self.blue_platoons_force_list = []
+        self.blue_platoons_efficiency_list = []
+        self.blue_platoons_ef_list = []
+        self.blue_platoons_num_list = []
+        self.blue_companies_force_list = []
+        self.blue_companies_efficiency_list = []
+        self.blue_companies_ef_list = []
+        self.blue_companies_num_list = []
 
 
 def main():
@@ -477,8 +720,8 @@ def main():
     dummy_policy(padded_obs, mask)
 
     # Load model
-    load_dir = Path(__file__).parent / 'trial-81/models'
-    load_name = '/model_83000/'
+    load_dir = Path(__file__).parent / 'models'
+    load_name = '/model_15000/'
 
     dummy_policy.load_weights(str(load_dir) + load_name)
 
@@ -519,6 +762,13 @@ def main():
     print(f" - num_blue_win = {result['num_blue_win']}")
     print(f" - num_draw = {result['draw']}")
     print(f" - num_no_contest = {result['no_contest']}")
+
+    dir_save = './trial/test_engagement'
+    if not os.path.exists(dir_save):
+        os.mkdir(dir_save)
+
+    with open(dir_save + '/result.json', 'w') as f:
+        json.dump(result, f, indent=5)
 
     ray.shutdown()
 

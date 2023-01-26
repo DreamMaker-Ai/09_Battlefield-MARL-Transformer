@@ -6,3 +6,7 @@
 01_Preliminary/models/
 
 01_Preliminary/simulate_lanchester_model_with_reds_and_blues/
+
+01_Preliminary/trial/
+
+*.json

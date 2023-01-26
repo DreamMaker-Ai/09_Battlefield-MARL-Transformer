@@ -159,7 +159,7 @@ class MakeAnimation:
         self.total_force_blues.append(total_effective_force_blues)
 
     def movie_generator(self, fig, ax, content, features_1, features_2, env):
-        dir_save = './animation'
+        dir_save = './trial/test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -175,13 +175,13 @@ class MakeAnimation:
             ax[0].set_title('efficiency', size=fontsize)
 
         elif content == 'force':
-            ax[0].set_title('log_norm(force)', size=fontsize)
+            ax[0].set_title('norm(force)', size=fontsize)
 
         elif content == 'efficiency_obs':
             ax[0].set_title('efficiency', size=fontsize)
 
         elif content == 'force_obs':
-            ax[0].set_title('log_norm_obs(force)', size=fontsize)
+            ax[0].set_title('norm_obs(force)', size=fontsize)
 
         else:
             raise NotImplementedError()
@@ -237,24 +237,16 @@ class MakeAnimation:
                                          repeat_delay=3000, repeat=True)
 
         if content == 'efficiency':
-            filename = './animation/anim_efficiency_reds_' + \
-                       str(int(env.initial_reds_force)) + \
-                       '_blues_' + str(int(env.initial_blues_force))
+            filename = './trial/test_engagement/efficiency'
 
         elif content == 'force':
-            filename = './animation/anim_effective_force_reds_' + \
-                       str(int(env.initial_reds_force)) + \
-                       '_blues_' + str(int(env.initial_blues_force))
+            filename = './trial/test_engagement/effective_force'
 
         elif content == 'efficiency_obs':
-            filename = './animation/anim_effective_ef_reds_obs_' + \
-                       str(int(env.initial_reds_force)) + \
-                       '_blues_' + str(int(env.initial_blues_force))
+            filename = './trial/test_engagement/agent_obs_effective_ef'
 
         elif content == 'force_obs':
-            filename = './animation/anim_effective_force_reds_obs_' + \
-                       str(int(env.initial_reds_force)) + \
-                       '_blues_' + str(int(env.initial_blues_force))
+            filename = './trial/test_engagement/agent_obs_effective_force'
 
         else:
             raise NotImplementedError()
@@ -298,13 +290,13 @@ class MakeAnimation:
         observations of red[-1]: (grid_size, grid_size, env.config.observation_channels)
         observations = [
             0. env.battlefield
-            1. ally_log_normalized_force
+            1. ally_normalized_force
             2. ally_efficiency
-            3. my_log_normalized_force
+            3. my_normalized_force
             4. my_efficiency
-            5. blue_log_normalized_force
+            5. blue_normalized_force
             6. blue_efficiency
-            7. engage_log_normalized_force ]  
+            7. engage_normalized_force ]  
         """
         # observations of log-normalized force
         r_channel_force = self.battlefield[:, :, 0] + observations[:, :, 1] + observations[:, :, 3]
@@ -361,11 +353,11 @@ class MakeAnimation:
         For 6 ch
         observations of red[-1]: (grid_size, grid_size, env.config.observation_channels)
         observations = [
-            0. ally_log_normalized_force
+            0. ally_normalized_force
             1. ally_efficiency
-            2. my_log_normalized_force
+            2. my_normalized_force
             3. my_efficiency
-            4. blue_log_normalized_force
+            4. blue_normalized_force
             5. blue_efficiency
             ]  
         """
