@@ -85,7 +85,7 @@ class Config:
         self.red_platoons = (3, 10)  # num range of red platoons
         self.red_companies = (2, 5)  # num range of red companies
 
-        self.blue_platoons = (3, 0)  # num range of blue platoons
+        self.blue_platoons = (3, 10)  # num range of blue platoons
         self.blue_companies = (2, 5)  # num range of blue companies
 
         self.efficiencies_red = (0.3, 0.5)  # range
