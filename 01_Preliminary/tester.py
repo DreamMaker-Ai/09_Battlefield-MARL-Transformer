@@ -1,6 +1,7 @@
 import os.path
 import random
 import json
+from pathlib import Path
 
 import ray
 import gym
@@ -187,6 +188,9 @@ class Tester:
             red = self.env.reds[-1]
             if red.alive:
                 self.env.make_animation.add_observations_3(observations[red.id])
+
+        # For saving best model
+        self.num_max_win = -1
 
     def reset_states(self, observations):
         # TODO prev_actions
@@ -440,6 +444,14 @@ class Tester:
                     self.step += 1
 
         result = summarize_results(results)
+
+        if result['num_red_win'] >= self.num_max_win:
+            save_dir = Path(__file__).parent / 'models'
+            save_name = '/best_model/best_model'
+
+            self.policy.save_weights(str(save_dir) + save_name)
+
+            self.num_max_win = result['num_red_win']
 
         return result
 
@@ -720,8 +732,8 @@ def main():
     dummy_policy(padded_obs, mask)
 
     # Load model
-    load_dir = Path(__file__).parent / 'models'
-    load_name = '/model_15000/'
+    load_dir = Path(__file__).parent / 'trial-0/models'
+    load_name = '/model_22200/'
 
     dummy_policy.load_weights(str(load_dir) + load_name)
 
