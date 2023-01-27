@@ -12,3 +12,9 @@
 *.json
 
 01_Preliminary/trial-0/
+
+01_Baseline/models/
+
+01_Baseline/__pycache__/
+
+01_Baseline/trial-0/
