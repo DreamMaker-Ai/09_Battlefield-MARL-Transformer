@@ -447,7 +447,7 @@ class Tester:
 
         if result['num_red_win'] >= self.num_max_win:
             save_dir = Path(__file__).parent / 'models'
-            save_name = '/best_model/best_model'
+            save_name = '/best_model/'
 
             self.policy.save_weights(str(save_dir) + save_name)
 
@@ -483,7 +483,7 @@ class Tester:
             'blues_initial_properties': blue_properties,
         }
 
-        dir_save = './trial/test_engagement'
+        dir_save = './test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -491,7 +491,7 @@ class Tester:
             json.dump(initial_conds, f, indent=5)
 
     def make_time_plot(self):
-        dir_save = './trial/test_engagement'
+        dir_save = './test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -733,7 +733,7 @@ def main():
 
     # Load model
     load_dir = Path(__file__).parent / 'trial-1/models'
-    load_name = '/best_model/'
+    load_name = '/best_model/best_model'
 
     dummy_policy.load_weights(str(load_dir) + load_name)
 
@@ -775,7 +775,7 @@ def main():
     print(f" - num_draw = {result['draw']}")
     print(f" - num_no_contest = {result['no_contest']}")
 
-    dir_save = './trial/test_engagement'
+    dir_save = './test_engagement'
     if not os.path.exists(dir_save):
         os.mkdir(dir_save)
 

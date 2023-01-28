@@ -18,32 +18,32 @@ class CNNModel(tf.keras.models.Model):
     _________________________________________________________________
      Layer (type)                Output Shape              Param #
     =================================================================
-     input_1 (InputLayer)        [(None, 17, 20, 20, 16)]  0
+     input_1 (InputLayer)        [(None, 15, 15, 15, 6)]   0
 
-     time_distributed (TimeDistr  (None, 17, 20, 20, 64)   1088
+     time_distributed (TimeDistr  (None, 15, 15, 15, 64)   448
      ibuted)
 
-     time_distributed_1 (TimeDis  (None, 17, 9, 9, 64)     36928
+     time_distributed_1 (TimeDis  (None, 15, 7, 7, 64)     36928
      tributed)
 
-     time_distributed_2 (TimeDis  (None, 17, 7, 7, 64)     36928
+     time_distributed_2 (TimeDis  (None, 15, 5, 5, 64)     36928
      tributed)
 
-     time_distributed_3 (TimeDis  (None, 17, 5, 5, 64)     36928
+     time_distributed_3 (TimeDis  (None, 15, 3, 3, 64)     36928
      tributed)
 
-     time_distributed_4 (TimeDis  (None, 17, 1600)         0
+     time_distributed_4 (TimeDis  (None, 15, 576)          0
      tributed)
 
-     time_distributed_5 (TimeDis  (None, 17, 256)          409856
+     time_distributed_5 (TimeDis  (None, 15, 256)          147712
      tributed)
 
-     tf.math.multiply (TFOpLambd  (None, 17, 256)          0
+     tf.math.multiply (TFOpLambd  (None, 15, 256)          0
      a)
 
     =================================================================
-    Total params: 521,728
-    Trainable params: 521,728
+    Total params: 258,944
+    Trainable params: 258,944
     Non-trainable params: 0
     _________________________________________________________________
 
@@ -211,12 +211,10 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
         self.add1 = \
             tf.keras.layers.Add()
 
-
         self.layernorm1 = \
             tf.keras.layers.LayerNormalization(
                 axis=-1, center=True, scale=True
             )
-
 
         self.dense1 = \
             tf.keras.layers.Dense(
@@ -234,12 +232,10 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
 
         self.add2 = tf.keras.layers.Add()
 
-
         self.layernorm2 = \
             tf.keras.layers.LayerNormalization(
                 axis=-1, center=True, scale=True
             )
-
 
     @tf.function
     def call(self, inputs, mask=None, training=True):

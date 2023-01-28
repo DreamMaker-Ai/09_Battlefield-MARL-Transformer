@@ -127,7 +127,7 @@ class MakeAnimation_AttentionMap:
         """
         heads_type: 'val_heads' or 'policy_heads'
         """
-        dir_save = './trial/test_engagement'
+        dir_save = './test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -177,7 +177,7 @@ class MakeAnimation_AttentionMap:
         anim = animation.ArtistAnimation(fig, ims, interval=300, blit=True,
                                          repeat_delay=3000, repeat=True)
 
-        filename = './trial/test_engagement/agent_obs_attention_heads'
+        filename = './test_engagement/agent_obs_attention_heads'
         anim.save(filename + '.mp4', writer='ffmpeg')
         # For mp4, need 'sudo apt install ffmpeg' @ terminal
 

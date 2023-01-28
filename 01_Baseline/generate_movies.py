@@ -159,7 +159,7 @@ class MakeAnimation:
         self.total_force_blues.append(total_effective_force_blues)
 
     def movie_generator(self, fig, ax, content, features_1, features_2, env):
-        dir_save = './trial/test_engagement'
+        dir_save = './test_engagement'
         if not os.path.exists(dir_save):
             os.mkdir(dir_save)
 
@@ -237,16 +237,16 @@ class MakeAnimation:
                                          repeat_delay=3000, repeat=True)
 
         if content == 'efficiency':
-            filename = './trial/test_engagement/efficiency'
+            filename = './test_engagement/efficiency'
 
         elif content == 'force':
-            filename = './trial/test_engagement/effective_force'
+            filename = './test_engagement/effective_force'
 
         elif content == 'efficiency_obs':
-            filename = './trial/test_engagement/agent_obs_effective_ef'
+            filename = './test_engagement/agent_obs_effective_ef'
 
         elif content == 'force_obs':
-            filename = './trial/test_engagement/agent_obs_effective_force'
+            filename = './test_engagement/agent_obs_effective_force'
 
         else:
             raise NotImplementedError()

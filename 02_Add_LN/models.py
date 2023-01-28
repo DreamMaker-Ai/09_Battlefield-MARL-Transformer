@@ -18,24 +18,24 @@ class MarlTransformerModel(tf.keras.models.Model):
     _________________________________________________________________
      Layer (type)                Output Shape              Param #
     =================================================================
-     input_1 (InputLayer)        [(None, 17, 20, 20, 16)]  0
+     input_1 (InputLayer)        [(None, 15, 15, 15, 6)]   0
 
-     cnn_model (CNNModel)        (None, 17, 256)           521728
+     cnn_model (CNNModel)        (None, 15, 256)           258944
 
-     dropout (Dropout)           (None, 17, 256)           0
+     dropout (Dropout)           (None, 15, 256)           0
 
-     multi_head_attention_model   ((None, 17, 256),        526080
-     (MultiHeadAttentionModel)    (None, 2, 17, 17))
+     multi_head_attention_model   ((None, 15, 256),        526080
+     (MultiHeadAttentionModel)    (None, 2, 15, 15))
 
-     multi_head_attention_model_  ((None, 17, 256),        526080
-     1 (MultiHeadAttentionModel)   (None, 2, 17, 17))
+     multi_head_attention_model_  ((None, 15, 256),        526080
+     1 (MultiHeadAttentionModel)   (None, 2, 15, 15))
 
-     q_logits_model (QLogitsMode  (None, 17, 5)            395525
+     q_logits_model (QLogitsMode  (None, 15, 5)            395525
      l)
 
     =================================================================
-    Total params: 1,969,413
-    Trainable params: 1,969,413
+    Total params: 1,706,629
+    Trainable params: 1,706,629
     Non-trainable params: 0
     _________________________________________________________________
     """
