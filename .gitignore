@@ -20,3 +20,11 @@
 01_Baseline/trial-0/
 
 01_Baseline/trial-1/
+
+02_Add_LN/trial-20/
+
+history_plots/
+
+04_Deeper_Transformer/models_architecture/
+
+04_Deeper_Transformer/__pycache__/
