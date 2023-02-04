@@ -28,3 +28,7 @@ history_plots/
 04_Deeper_Transformer/models_architecture/
 
 04_Deeper_Transformer/__pycache__/
+
+02_Add_LN/__pycache__/
+
+03_Big_batch/trial-30/

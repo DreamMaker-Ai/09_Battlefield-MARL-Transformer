@@ -166,40 +166,35 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
              score: (None,num_heads,n,n)=(None,2,17,17)
 
     Model: "mha_1"
-    __________________________________________________________________________________________________
+    _______________________________________________________________________________________________
      Layer (type)                   Output Shape         Param #     Connected to
-    ==================================================================================================
-     input_1 (InputLayer)           [(None, 15, 256)]    0           []
+    ===============================================================================================
+     input_3 (InputLayer)           [(None, 9, 256)]     0           []
 
-     multi_head_attention (MultiHea  ((None, 15, 256),   263168      ['input_1[0][0]',
-     dAttention)                     (None, 2, 15, 15))               'input_1[0][0]',
-                                                                      'input_1[0][0]']
+     multi_head_attention (MultiHea  ((None, 9, 256),    263168      ['input_3[0][0]',
+     dAttention)                     (None, 2, 9, 9))                 'input_3[0][0]',
+                                                                      'input_3[0][0]']
 
-     add (Add)                      (None, 15, 256)      0           ['input_1[0][0]',
+     add (Add)                      (None, 9, 256)       0           ['input_3[0][0]',
                                                                       'multi_head_attention[0][0]']
 
-     layer_normalization (LayerNorm  (None, 15, 256)     512         ['add[0][0]']
-     alization)
+     dense_1 (Dense)                (None, 9, 512)       131584      ['add[0][0]']
 
-     dense_1 (Dense)                (None, 15, 512)      131584      ['layer_normalization[0][0]']
+     dense_2 (Dense)                (None, 9, 256)       131328      ['dense_1[0][0]']
 
-     dense_2 (Dense)                (None, 15, 256)      131328      ['dense_1[0][0]']
+     dropout (Dropout)              (None, 9, 256)       0           ['dense_2[0][0]']
 
-     dropout (Dropout)              (None, 15, 256)      0           ['dense_2[0][0]']
-
-     add_1 (Add)                    (None, 15, 256)      0           ['layer_normalization[0][0]',
+     add_1 (Add)                    (None, 9, 256)       0           ['add[0][0]',
                                                                       'dropout[0][0]']
 
-     layer_normalization_1 (LayerNo  (None, 15, 256)     512         ['add_1[0][0]']
-     rmalization)
+     tf.math.multiply_2 (TFOpLambda  (None, 9, 256)      0           ['add_1[0][0]']
+     )
 
-     tf.math.multiply (TFOpLambda)  (None, 15, 256)      0           ['layer_normalization_1[0][0]']
-
-    ==================================================================================================
-    Total params: 527,104
-    Trainable params: 527,104
+    ===============================================================================================
+    Total params: 526,080
+    Trainable params: 526,080
     Non-trainable params: 0
-    __________________________________________________________________________________________________
+    _______________________________________________________________________________________________
     """
 
     def __init__(self, config, **kwargs):
@@ -216,10 +211,12 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
         self.add1 = \
             tf.keras.layers.Add()
 
+        """
         self.layernorm1 = \
             tf.keras.layers.LayerNormalization(
                 axis=-1, center=True, scale=True
             )
+        """
 
         self.dense1 = \
             tf.keras.layers.Dense(
@@ -237,10 +234,12 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
 
         self.add2 = tf.keras.layers.Add()
 
+        """
         self.layernorm2 = \
             tf.keras.layers.LayerNormalization(
                 axis=-1, center=True, scale=True
             )
+        """
 
     @tf.function
     def call(self, inputs, mask=None, training=True):
@@ -270,7 +269,7 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
 
         x1 = self.add1([inputs, x])  # (None,n,hidden_dim)=(None,17,256)
 
-        x1 = self.layernorm1(x1)
+        # x1 = self.layernorm1(x1)
 
         x2 = self.dense1(x1)  # (None,n,hidden_dim)=(None,17,512)
 
@@ -280,7 +279,7 @@ class MultiHeadAttentionModel(tf.keras.models.Model):
 
         features = self.add2([x1, x2])  # (None,n,hidden_dim)=(None,17,256)
 
-        features = self.layernorm2(features)
+        # features = self.layernorm2(features)
 
         broadcast_float_mask = \
             tf.expand_dims(

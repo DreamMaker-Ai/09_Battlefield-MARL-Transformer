@@ -16,15 +16,15 @@ class Config:
             self.actor_cycles = 0
 
         # Define simulation cond.
-        self.show_each_episode_result = True  # mainly for debug
+        self.show_each_episode_result = False  # mainly for debug
         self.draw_win_distributions = False  # mainly for debug
-        self.max_episodes_test_play = 1  # default=50 for training
+        self.max_episodes_test_play = 50  # default=50 for training
 
         # Animation setting
-        self.make_animation = True  # Use self.max_episodes_test_play=1
+        self.make_animation = False  # Use self.max_episodes_test_play=1
 
         # Time plot of a test setting
-        self.make_time_plot = True  # Use self.max_episodes_test_play=1
+        self.make_time_plot = False  # Use self.max_episodes_test_play=1
 
         # Define environment parameters
         self.grid_size = 15  # default=20
@@ -37,7 +37,7 @@ class Config:
         observation_low = 0.
         observation_high = 1.
         self.observation_channels = 6
-        self.n_frames = 1
+        self.n_frames = 4
         self.observation_space = \
             gym.spaces.Box(low=observation_low,
                            high=observation_high,

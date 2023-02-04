@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def main():
-    filetype = '/history/run-.-tag-num_red_win.csv'
+    filetype = '/history/run-.-tag-mean_remaining_blue_effective_force_ratio.csv'
     filelist = [
         '01_Baseline/trial-1',
         '02_Add_LN/trial-20',
@@ -21,16 +21,16 @@ def main():
 
         wall_time = csv_df[csv_df.columns[0]]
         step = csv_df[csv_df.columns[1]]
-        num_red_win = csv_df[csv_df.columns[2]]
+        blues_force = csv_df[csv_df.columns[2]]
 
         plt.xlabel('learning steps [k]')
-        plt.ylabel('reds win ratio')
+        plt.ylabel('mean remaining effective force of blues')
 
-        plt.plot(step/1000, num_red_win/50, linestyle='solid', color=c, alpha=0.7, linewidth=1,
+        plt.plot(step/1000, blues_force, linestyle='solid', color=c, alpha=0.7, linewidth=1,
                  label=f)
 
     # plt.yscale('log')
-    plt.title('Reds win ratio vs Learning steps (Over 50 random tests)')
+    plt.title('Mean remaining effective force of blues vs Learning steps')
     plt.grid(which="both")
     plt.minorticks_on()
     plt.legend()
