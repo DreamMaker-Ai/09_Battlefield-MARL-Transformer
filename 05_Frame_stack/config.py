@@ -37,7 +37,7 @@ class Config:
         observation_low = 0.
         observation_high = 1.
         self.observation_channels = 6
-        self.n_frames = 4
+        self.n_frames = 2
         self.observation_space = \
             gym.spaces.Box(low=observation_low,
                            high=observation_high,
