@@ -18,7 +18,7 @@ class Config:
         # Define simulation cond.
         self.show_each_episode_result = False  # mainly for debug
         self.draw_win_distributions = False  # mainly for debug
-        self.max_episodes_test_play = 5  # default=50 for training
+        self.max_episodes_test_play = 50  # default=50 for training
 
         # Animation setting
         self.make_animation = False  # Use self.max_episodes_test_play=1
