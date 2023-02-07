@@ -16,15 +16,15 @@ class Config:
             self.actor_cycles = 0
 
         # Define simulation cond.
-        self.show_each_episode_result = True  # mainly for debug
+        self.show_each_episode_result = False  # mainly for debug
         self.draw_win_distributions = False  # mainly for debug
-        self.max_episodes_test_play = 1  # default=50 for training
+        self.max_episodes_test_play = 5  # default=50 for training
 
         # Animation setting
-        self.make_animation = True  # Use self.max_episodes_test_play=1
+        self.make_animation = False  # Use self.max_episodes_test_play=1
 
         # Time plot of a test setting
-        self.make_time_plot = True  # Use self.max_episodes_test_play=1
+        self.make_time_plot = False  # Use self.max_episodes_test_play=1
 
         # Define environment parameters
         self.grid_size = 15  # default=20
@@ -36,7 +36,7 @@ class Config:
 
         observation_low = 0.
         observation_high = 1.
-        self.observation_channels = 6
+        self.observation_channels = 7
         self.n_frames = 1
         self.observation_space = \
             gym.spaces.Box(low=observation_low,
@@ -82,11 +82,11 @@ class Config:
         self.agent_forces = (50, 150)
 
         # Define possible red / blue agent parameters
-        self.red_platoons = (3, 3)  # num range of red platoons, default=(3,10)
-        self.red_companies = (2, 2)  # num range of red companies, default=(2,5)
+        self.red_platoons = (3, 10)  # num range of red platoons, default=(3,10)
+        self.red_companies = (2, 5)  # num range of red companies, default=(2,5)
 
-        self.blue_platoons = (9, 9)  # num range of blue platoons, default=(3,10)
-        self.blue_companies = (6, 6)  # num range of blue companies, default=(2,5)
+        self.blue_platoons = (3, 10)  # num range of blue platoons, default=(3,10)
+        self.blue_companies = (2, 5)  # num range of blue companies, default=(2,5)
 
         self.efficiencies_red = (0.3, 0.5)  # range
         self.efficiencies_blue = (0.3, 0.5)
