@@ -732,8 +732,8 @@ def main():
     dummy_policy(padded_obs, mask)
 
     # Load model
-    load_dir = Path(__file__).parent / 'trial-1/models'
-    load_name = '/best_model/best_model'
+    load_dir = Path(__file__).parent / 'trial-40/models'
+    load_name = '/best_model/checkpoint'
 
     dummy_policy.load_weights(str(load_dir) + load_name)
 

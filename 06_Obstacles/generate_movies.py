@@ -37,8 +37,8 @@ def rgb_channel_maker(r_channel, g_channel, b_channel):
     """
     rgb_channel = np.concatenate([r_channel, g_channel, b_channel], axis=2)
 
-    if np.max(rgb_channel) > 1 or np.min(rgb_channel) < 0:
-        raise ValueError
+    #if np.max(rgb_channel) > 1 or np.min(rgb_channel) < 0:
+    #    raise ValueError
 
     return rgb_channel
 

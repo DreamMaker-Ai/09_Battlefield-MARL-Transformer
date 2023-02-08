@@ -754,7 +754,7 @@ def main():
 
     # Load model
     load_dir = Path(__file__).parent / 'models'
-    load_name = '/best_model/checkpoint'
+    load_name = '/model_200/'
 
     dummy_policy.load_weights(str(load_dir) + load_name)
 
