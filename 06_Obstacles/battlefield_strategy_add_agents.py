@@ -12,7 +12,7 @@ import pickle
 from agents_in_env import RED, BLUE
 from config import Config
 from generate_agents_in_env import generate_red_team, generate_blue_team
-
+from generate_env import random_shape_maze
 from rewards import get_consolidation_of_force_rewards, get_economy_of_force_rewards
 from observations import get_observations
 from engage import engage_and_get_rewards, compute_engage_mask, get_dones
@@ -65,7 +65,14 @@ class BattleFieldStrategy(gym.Env):
     def reset(self):
         self.config.reset()  # Revise config for new episode
 
-        self.battlefield = np.zeros((self.config.grid_size, self.config.grid_size))  # (g,g)
+        # self.battlefield = np.zeros((self.config.grid_size, self.config.grid_size))  # (g,g)
+
+        self.battlefield = random_shape_maze(width=self.config.grid_size,
+                                             height=self.config.grid_size,
+                                             max_shapes=self.config.grid_size / 10,
+                                             max_size=self.config.grid_size / 5,
+                                             allow_overlap=True,
+                                             shape=None)  # (g,g)
 
         """ Generate agent teams based on config """
 

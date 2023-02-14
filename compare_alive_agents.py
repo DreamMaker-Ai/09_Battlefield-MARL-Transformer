@@ -7,9 +7,8 @@ from pathlib import Path
 
 def main():
     filetype = [
-        '/history/run-.-tag-num_red_win.csv',
-        '/history/run-.-tag-num_blue_win.csv',
-        '/history/run-.-tag-num_no_contest.csv'
+        '/history/run-.-tag-mean_num_alive_red_ratio.csv',
+        '/history/run-.-tag-mean_num_alive_blue_ratio.csv',
     ]
     filelist = '01_Baseline/trial-1'
     # filelist = '02_Add_LN/trial-20'
@@ -30,15 +29,15 @@ def main():
         prop = csv_df[csv_df.columns[2]]
 
         plt.xlabel('learning steps [k]')
-        plt.ylabel('win ratio')
+        plt.ylabel('average alive agents ratio')
 
-        label = f.replace('/history/run-.-tag-num_', '')
+        label = f.replace('/history/run-.-tag-mean_', '')
         label = label.replace('.csv', '')
-        plt.plot(step / 1000, prop / 50, linestyle='solid', color=c, alpha=0.7, linewidth=1,
+        plt.plot(step / 1000, prop, linestyle='solid', color=c, alpha=0.7, linewidth=1,
                  label=label)
 
     # plt.yscale('log')
-    plt.title('Win ratio vs Learning steps (Over 50 random tests)')
+    plt.title('Average num of alive agents (Over 50 random tests)')
     plt.grid(which="both")
     plt.minorticks_on()
     plt.legend()
@@ -47,7 +46,7 @@ def main():
     if not os.path.exists(savedir):
         os.mkdir(savedir)
 
-    savename = 'Win_looses_no-contest'
+    savename = 'Alive agents'
     plt.savefig(str(savedir) + '/' + savename + '.png', dpi=300)
 
     plt.show()

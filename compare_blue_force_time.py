@@ -10,7 +10,10 @@ def main():
     filetype = '/history/run-.-tag-mean_remaining_blue_effective_force_ratio.csv'
     filelist = [
         '01_Baseline/trial-1',
-        '02_Add_LN/trial-20',
+        # '02_Add_LN/trial-20',
+        # '03_Big_batch/trial-30',
+        # '04_Deeper_Transformer/trial-40',
+        '05_Frame_stack/trial-50'
     ]
     colorlist = ['r', 'b', 'g', 'm', 'y']
 

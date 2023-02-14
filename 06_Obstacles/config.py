@@ -66,7 +66,7 @@ class Config:
         self.num_minibatchs = 30  # bach_sizeのminibatchの数/1 update_cycle of learner, default=30
         self.tau = 0.01  # Soft update of target network
         self.gamma = 0.96
-        self.max_steps = 150  # Default = 150
+        self.max_steps = 150  # Default = 100
 
         self.learning_rate = 5e-5  # Default = 1e-4
         self.loss_coef = 1.0  # Default = 1.0
@@ -92,7 +92,7 @@ class Config:
         self.efficiencies_blue = (0.3, 0.5)
 
         # For paddiing of multi-agents, *3 for adding red agents
-        self.max_num_red_agents = (self.red_platoons[1] + self.red_companies[1]) * 4
+        self.max_num_red_agents = (self.red_platoons[1] + self.red_companies[1]) * 1  # default=1
 
         # Red team TBD parameters
         self.R0 = None  # initial total force, set in 'generate_red_team'
