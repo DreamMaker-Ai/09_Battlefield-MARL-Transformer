@@ -6,6 +6,8 @@ Implementation of the following blog post
 
 [Preliminary Implementation of MARL-Transformer for Generating Battlefield Strategy (2)](https://medium.com/@tym406/preliminary-implementation-of-marl-transformer-for-generating-battlefield-strategy-2-f32bb5187917?source=your_stories_page-------------------------------------)
 
+
+# Abstract
 In this preliminary implementation, I propose the MARL-Transformer, which applies the transformer used in natural language processing to multi-agent reinforcement learning (MARL).
 
 By using the MARL-Transformer, the followings are possible.
